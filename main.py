@@ -23,21 +23,20 @@ driver = webdriver.Chrome(options=chrome_options)
 
 driver.get(url)
 
+
 WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, './/div[contains(@data-a-id,"card")]')))
 
 categories = []
 card_elements = driver.find_elements(By.XPATH, './/div[contains(@data-a-id,"card")]')
-for index,card_element in enumerate(card_elements):
-# for card_element in card_elements:
+# for index,card_element in enumerate(card_elements):
+for card_element in card_elements:
     category = Category(card_element, driver=driver)
     category.extract_data()
     categories.append(category)
 
-    if index == 1:
-        break
+    # if index == 1:
+    #     break
 
-
-    # break
 
 driver.close()
 
@@ -46,5 +45,5 @@ output = [
     for category in categories
 ]
 
-with open('output.json', 'r') as json_file:
+with open('output.json', 'w') as json_file:
     json.dump(output, json_file, indent=2)

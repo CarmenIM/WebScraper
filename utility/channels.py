@@ -10,8 +10,10 @@ class Channel:
         self._element = element
         self._driver = driver
         self._title = None
+        # self._image = None
         self._followers = None
         self._viewers = None
+        self._time = None
 
     def extract_data(self):
         link_element = self._element.find_element(By.TAG_NAME, 'a')
@@ -24,10 +26,10 @@ class Channel:
         # time.sleep(5)
 
         self._title = self._driver.find_element(By.XPATH, './/h1[contains(@class,"tw-title")]').text
-        self._followers = self._driver.find_element(By.XPATH,
-                                                    './/section[@id="live-channel-about-panel"]//span//span').text
+        self._followers = self._driver.find_element(By.XPATH, './/section[@id="live-channel-about-panel"]//span//span').text
         self._viewers = self._driver.find_element(By.XPATH, './/div[@role="presentation"]/following-sibling::p[1]').text
-        print(self._title, self._followers, self._viewers)
+        self._time = self._driver.find_element(By.XPATH, './/span[contains(@class,"live-time")]').text
+        print(self._title, self._followers, self._viewers, self._time)
 
         self._driver.close()
         self._driver.switch_to.window(self._driver.window_handles[-1])
@@ -35,6 +37,8 @@ class Channel:
     def to_dict(self):
         return {
             'Channel Title': self._title,
+            # 'Image channel': self._image,
             'Channel Followers': self._followers,
-            'Channel Viewers': self._viewers
+            'Channel Viewers': self._viewers,
+            'Time live': self._time
         }

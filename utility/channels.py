@@ -9,6 +9,7 @@ class Channel:
     def __init__(self, element, driver):
         self._element = element
         self._driver = driver
+        self._logo = None
         self._title = None
         # self._image = None
         self._followers = None
@@ -25,19 +26,20 @@ class Channel:
             EC.presence_of_element_located((By.XPATH, './/div[@role="presentation"]/following-sibling::p[1]')))
         # time.sleep(5)
 
+        self._logo = self._driver.find_element(By.XPATH, './/div[@class="channel-info-content"]//img[contains(@class,"tw-image-avatar")]').get_attribute("src")
         self._title = self._driver.find_element(By.XPATH, './/h1[contains(@class,"tw-title")]').text
         self._followers = self._driver.find_element(By.XPATH, './/section[@id="live-channel-about-panel"]//span//span').text
         self._viewers = self._driver.find_element(By.XPATH, './/div[@role="presentation"]/following-sibling::p[1]').text
         self._time = self._driver.find_element(By.XPATH, './/span[contains(@class,"live-time")]').text
-        print(self._title, self._followers, self._viewers, self._time)
+        print(self._logo, self._title, self._followers, self._viewers, self._time)
 
         self._driver.close()
         self._driver.switch_to.window(self._driver.window_handles[-1])
 
     def to_dict(self):
         return {
+            'Logo': self._logo,
             'Channel Title': self._title,
-            # 'Image channel': self._image,
             'Channel Followers': self._followers,
             'Channel Viewers': self._viewers,
             'Time live': self._time
